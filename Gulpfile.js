@@ -92,27 +92,8 @@ gulp.task('packPublic', function() {
     '!app/**/public/{vendor,vendor/**}',
     '!app/**/bin/*'
     ])
-    // .pipe(concat)
     .pipe(flatten({ includeParents: -1 }))
-    // .pipe(webpack(require('./webpack.config')))
     .pipe(gulp.dest(paths.dest + "/" + paths.public));
-    
-  
-  // var jsStream = gulp.src([
-  //     'app/**/public/**/*.{js}',
-  //     '!app/**/public/{vendor,vendor/**}'
-  //   ])
-  //   .pipe(flatten({ includeParents: -1 }))
-  //   .pipe(gulp.dest(paths.dest + "/" + paths.public + "/scripts/"));
-    
-  // var cssStream = gulp.src([
-  //     'app/**/public/**/*.css',
-  //     '!app/**/public/{vendor,vendor/**}'
-  //   ])
-  //   .pipe(flatten({ includeParents: -1 }))
-  //   .pipe(gulp.dest(paths.dest + "/" + paths.public + "/css/"))
-
-  // return merge(cssStream, jsStream, imageStream);    
 });
 
 gulp.task('copyVendor', function() {
@@ -122,14 +103,7 @@ gulp.task('copyVendor', function() {
   return gulp.src([
     '/app/**/vendor/**/*'])
     .pipe(flatten({includeParents: 3}))
-    // .pipe(concat("vendor.js"))
-    .pipe(gulp.dest(paths.dest + '/' + paths.public + '/vendor/'))
-    
-  // var cssStream = gulp.src(['/app/**/vendor/**/*.css'])
-  //   // .pipe(concat("vendor.css"))
-  //   .pipe(gulp.dest(paths.dest + '/' + paths.public + '/'));
-    
-  // return merge(jsStream, cssStream);
+    .pipe(gulp.dest(paths.dest + '/' + paths.public + '/vendor/'));
 });
 
 gulp.task('cleanPublic', function() {
@@ -139,7 +113,7 @@ gulp.task('cleanPublic', function() {
       paths.dest + "/temp"
     ])
     .pipe(clean());
-})
+});
 
 /** 
  * Make everything in the 'build' folder read-only so we don't accidentally 
@@ -151,18 +125,13 @@ gulp.task('finalizePermissions', function() {
         .pipe(chmod(544))
         .pipe(gulp.dest(paths.dest));
   
-})
+});
 
 gulp.task('build', ['copyComponents', 'copyViews'], function(done) {
   // Items that need to be done in series are done here.
   
   sync('copyPublic', 'copyStyles', 'packPublic', 'copyVendor', 'copyData', 'finalizePermissions', done);
   
-  //   return gulp.src( ['app/**/Gulpfile.js', 'app/**/gulpfile.js', '!app/**/node_modules/*'] )
-  //       .pipe( chug() )
-  // });
-  // Get all of the other gulpfiles in the component heirarchy
-  // and run those as well.
 });
 
 gulp.task('clean', function() {
